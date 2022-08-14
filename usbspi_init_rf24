@@ -1,0 +1,14 @@
+#!/bin/bash
+sudo modprobe spi-ch341-usb
+echo spidev | sudo tee /sys/bus/spi/devices/spi0.0/driver_override
+echo spi0.0 | sudo tee /sys/bus/spi/drivers/spidev/bind 
+echo falling | sudo tee /sys/class/gpio/gpio5/edge
+
+if [ -e "/dev/spidev0.0" ]; then
+	echo "Success. The device /dev/spidev0.0 exists."
+else
+	echo "Failed to create SPI device."
+fi
+
+echo "Changing permissions to 0666"
+sudo chmod 0666 /dev/spidev0.0
